@@ -24,4 +24,8 @@ class ApplicationController < ActionController::Base
   def logged_in?
     !current_user.nil?
   end
+
+  def moderator_check?
+    current_user.id == params[:sub][:moderator_id]
+  end
 end
