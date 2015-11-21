@@ -1,6 +1,6 @@
 class SubsController < ApplicationController
 
-  before_action :moderator_check?, only: :edit
+  before_action :moderator_check!, only: [:edit, :update]
 
   def index
     render :index
@@ -23,17 +23,15 @@ class SubsController < ApplicationController
   end
 
   def show
+    @sub = Sub.find(params[:id])
     render :show
   end
 
   def edit
-    @sub = Sub.find(params[:id])
     render :edit
   end
 
   def update
-    @sub = Sub.find(params[:id])
-
     if @sub.update_attributes(sub_params)
       redirect_to sub_url(@sub)
     else
@@ -45,5 +43,13 @@ class SubsController < ApplicationController
 
   def sub_params
     params.require(:sub).permit(:title, :description)
+  end
+
+  def quick_look_up
+    Sub.find(params[:id])
+  end
+
+  def moderator_check!
+    @sub = current_user.subs.find(params[:id])
   end
 end

@@ -5,6 +5,12 @@ class User < ActiveRecord::Base
 
   attr_reader :password
 
+  has_many :moderated_subs, foreign_key: :moderator_id, class_name: "Sub"
+
+  has_many :posts, foreign_key: :author_id
+
+  has_many :moderated_posts, through: :moderated_subs, source: :posts
+
   after_initialize :ensure_session_token
 
   def self.find_by_credentials(username, password)
